@@ -1,0 +1,31 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-provider-provider-endorser
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-provider-ns
+spec:
+  releaseName: baf-provider-provider-endorser
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-provider-provider-endorser
+      namespace: baf-provider-ns
+    network:
+      name: baf
+    image:
+      name: baf-provider
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:0.3.0.0
+      pullSecret: regcred
+    vault:
+      address: http://192.168.1.155:8200
+      keyPath: baf-provider.endorsers
+      identity: provider-endorser
+      auth_path: kubernetes-baf-provider-admin-auth
+    account:
+      service: baf-provider-admin-vault-auth
+      role: rw
