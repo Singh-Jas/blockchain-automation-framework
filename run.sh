@@ -6,6 +6,8 @@ echo "Starting build process..."
 echo "Adding env variables..."
 export PATH=/root/bin:$PATH
 
+git config --global push.default matching
+
 #Path to k8s config file
 KUBECONFIG=/home/blockchain-automation-framework/build/config
 
