@@ -1,0 +1,36 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-provider-provider-steward-1-auth-job
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-provider-ns
+spec:
+  releaseName: baf-provider-provider-steward-1-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-provider-provider-steward-1-auth-job
+      namespace: baf-provider-ns
+    network:
+      name: baf
+      kubernetes_url: https://192.168.99.103:8443
+    image:
+      name: baf-provider
+      repository: alpine:3.9.4
+    vault:
+      address: http://192.168.1.155:8200
+      keyPath: baf-provider.stewards
+      identity: provider-steward-1
+      admin_auth_path: kubernetes-baf-provider-admin-auth
+      policy: baf-provider-provider-steward-1-ro
+      policy_content: path \"/baf-provider/stewards/provider-steward-1/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-baf-provider-provider-steward-1-auth
+    account:
+      admin_service: baf-provider-admin-vault-auth
+      admin_role: rw
+      service: baf-provider-provider-steward-1-vault-auth
+      role: ro
