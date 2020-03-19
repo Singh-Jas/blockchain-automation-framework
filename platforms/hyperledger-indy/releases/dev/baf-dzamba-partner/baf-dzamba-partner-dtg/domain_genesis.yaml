@@ -1,0 +1,26 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-dzamba-partner-dtg
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-dzamba-partner-ns
+spec:
+  releaseName: baf-dzamba-partner-dtg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-domain-genesis
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-dzamba-partner-dtg
+      namespace: baf-dzamba-partner-ns
+    organization:
+      name: baf-dzamba-partner
+    configmap:
+      domainGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"alias":"authority-trustee","dest":"NeXszAHKdfD33hRogWUdc6","role":"0","verkey":"CoJrYd6Eb2UJLjcXvnc6WV9v4GhsKwbjtuEko3mYYMNv"},"metadata":{},"type":"1"},"txnMetadata":{"seqNo":1},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"provider-steward-1","dest":"ARoMVcctFupRdVPiWsdkp5","role":"2","verkey":"692QEM96Afk8B4g9a7ifidiBHHd8VTUGqeNMejs4F3ba"},"metadata":{"from":"NeXszAHKdfD33hRogWUdc6"},"type":"1"},"txnMetadata":{"seqNo":2},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"provider-steward-2","dest":"7TWJxBfxBUqgF6fUKT16iq","role":"2","verkey":"4X7rR3qjN5vMz8KCKcFFsqJLgpEBuKrmiNt4umjEkeEu"},"metadata":{"from":"NeXszAHKdfD33hRogWUdc6"},"type":"1"},"txnMetadata":{"seqNo":3},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"partner-steward-1","dest":"HJqW89rd3JxoHSh8bFkD1G","role":"2","verkey":"9tWkQB1FQJ2Mdf8dygTsxGwAbva17BQnyfV1V7yA9AKb"},"metadata":{"from":"NeXszAHKdfD33hRogWUdc6"},"type":"1"},"txnMetadata":{"seqNo":4},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"partner-steward-2","dest":"6ukhfZJQkzsLZ7VasMFPKZ","role":"2","verkey":"4Dp7YVF1QvdzUVJAdYnEDY71ZFZE7XLcs1wUApV3edWL"},"metadata":{"from":"NeXszAHKdfD33hRogWUdc6"},"type":"1"},"txnMetadata":{"seqNo":5},"ver":"1"}
