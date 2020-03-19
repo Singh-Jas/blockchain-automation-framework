@@ -1,0 +1,36 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-steward-3-auth-job
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-steward-3-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: dla-lm-steward-3-auth-job
+      namespace: dla-lm-ns
+    network:
+      name: DLA-NETWORK
+      kubernetes_url: 
+    image:
+      name: dla-lm
+      repository: alpine:3.9.4
+    vault:
+      address: http://192.168.1.155:8200
+      keyPath: dla-lm.stewards
+      identity: steward-3
+      admin_auth_path: kubernetes-dla-lm-admin-auth
+      policy: dla-lm-steward-3-ro
+      policy_content: path \"/dla-lm/stewards/steward-3/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-dla-lm-steward-3-auth
+    account:
+      admin_service: dla-lm-admin-vault-auth
+      admin_role: rw
+      service: dla-lm-steward-3-vault-auth
+      role: ro

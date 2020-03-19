@@ -1,0 +1,36 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-endorser-auth-job
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-endorser-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: dla-lm-endorser-auth-job
+      namespace: dla-lm-ns
+    network:
+      name: DLA-NETWORK
+      kubernetes_url: 
+    image:
+      name: dla-lm
+      repository: alpine:3.9.4
+    vault:
+      address: http://192.168.1.155:8200
+      keyPath: dla-lm.endorsers
+      identity: endorser
+      admin_auth_path: kubernetes-dla-lm-admin-auth
+      policy: dla-lm-endorser-ro
+      policy_content: path \"/dla-lm/endorsers/endorser/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-dla-lm-endorser-auth
+    account:
+      admin_service: dla-lm-admin-vault-auth
+      admin_role: rw
+      service: dla-lm-endorser-vault-auth
+      role: ro
