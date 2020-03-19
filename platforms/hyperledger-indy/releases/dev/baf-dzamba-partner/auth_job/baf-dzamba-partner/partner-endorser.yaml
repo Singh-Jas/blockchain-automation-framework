@@ -1,0 +1,36 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-dzamba-partner-partner-endorser-auth-job
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-dzamba-partner-ns
+spec:
+  releaseName: baf-dzamba-partner-partner-endorser-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-dzamba-partner-partner-endorser-auth-job
+      namespace: baf-dzamba-partner-ns
+    network:
+      name: baf
+      kubernetes_url: https://192.168.99.104:8443
+    image:
+      name: baf-dzamba-partner
+      repository: alpine:3.9.4
+    vault:
+      address: http://192.168.1.155:8200
+      keyPath: baf-dzamba-partner.endorsers
+      identity: partner-endorser
+      admin_auth_path: kubernetes-baf-dzamba-partner-admin-auth
+      policy: baf-dzamba-partner-partner-endorser-ro
+      policy_content: path \"/baf-dzamba-partner/endorsers/partner-endorser/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-baf-dzamba-partner-partner-endorser-auth
+    account:
+      admin_service: baf-dzamba-partner-admin-vault-auth
+      admin_role: rw
+      service: baf-dzamba-partner-partner-endorser-vault-auth
+      role: ro
