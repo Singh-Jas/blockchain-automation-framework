@@ -1,7 +1,7 @@
 # Remove all Helm releases of organization
 - name: Remove all Helm releases of organization {{ organization }}
   shell: |
-    KUBECONFIG={{ kubernetes.config_file }} helm ls | grep {{ organization }}- | awk '{print $1}' | xargs --no-run-if-empty helm delete --purge
+    KUBECONFIG={{ kubernetes.config_file }} helm ls --all --short | grep "{{ organization}}" | xargs -L1 helm delete --purge
 
 # Get all existing Cluster Role Bindings of organization
 - name: Get all existing Cluster Role Bindings of organization {{ organization }}
