@@ -6,7 +6,7 @@ Docker image for indy key management, which generates identity crypto and stores
 Ideally, the build of the image should be run from this directory.<br>
 For build run command below:
 ```bash
-docker build -t indy-key-mgmt:0.3.0.0 .
+docker build -t indy-key-mgmt:latest .
 ```
 
 ## How to use

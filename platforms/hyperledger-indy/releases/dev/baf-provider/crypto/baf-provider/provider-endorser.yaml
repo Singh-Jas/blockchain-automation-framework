@@ -19,7 +19,7 @@ spec:
       name: baf
     image:
       name: baf-provider
-      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:0.3.0.0
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:latest
       pullSecret: regcred
     vault:
       address: http://192.168.1.155:8200
