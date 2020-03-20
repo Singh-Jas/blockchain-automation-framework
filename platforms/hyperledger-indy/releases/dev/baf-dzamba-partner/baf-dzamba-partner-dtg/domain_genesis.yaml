@@ -9,7 +9,7 @@ spec:
   releaseName: baf-dzamba-partner-dtg
   chart:
     path: platforms/hyperledger-indy/charts/indy-domain-genesis
-    git: ssh://git@github.com:Singh-Jas/blockchain-automation-framework.git
+    git: ssh://git@github.com/Singh-Jas/blockchain-automation-framework.git
     ref: test-indy-release
   values:
     metadata:

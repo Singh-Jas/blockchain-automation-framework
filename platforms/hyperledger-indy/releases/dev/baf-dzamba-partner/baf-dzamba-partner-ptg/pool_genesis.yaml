@@ -9,7 +9,7 @@ spec:
   releaseName: baf-dzamba-partner-ptg
   chart:
     path: platforms/hyperledger-indy/charts/indy-pool-genesis
-    git: ssh://git@github.com:Singh-Jas/blockchain-automation-framework.git
+    git: ssh://git@github.com/Singh-Jas/blockchain-automation-framework.git
     ref: test-indy-release
   values:
     metadata:
