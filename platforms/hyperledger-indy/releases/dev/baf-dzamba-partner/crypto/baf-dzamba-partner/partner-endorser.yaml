@@ -9,7 +9,7 @@ spec:
   releaseName: baf-dzamba-partner-partner-endorser
   chart:
     path: platforms/hyperledger-indy/charts/indy-key-mgmt
-    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    git: ssh://git@github.com:Singh-Jas/blockchain-automation-framework.git
     ref: test-indy-release
   values:
     metadata:

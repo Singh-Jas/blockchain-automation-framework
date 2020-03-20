@@ -9,7 +9,7 @@ spec:
   releaseName: baf-dzamba-partner-partner-steward-2-auth-job
   chart:
     path: platforms/hyperledger-indy/charts/indy-auth-job
-    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    git: ssh://git@github.com:Singh-Jas/blockchain-automation-framework.git
     ref: test-indy-release
   values:
     metadata:

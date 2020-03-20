@@ -9,7 +9,7 @@ spec:
   releaseName: baf-provider-provider-steward-1-node
   chart:
     path: platforms/hyperledger-indy/charts/indy-node
-    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    git: ssh://git@github.com:Singh-Jas/blockchain-automation-framework.git
     ref: test-indy-release
   values:
     metadata:
