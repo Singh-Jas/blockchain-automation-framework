@@ -30,17 +30,17 @@ spec:
     node:
       name: provider-steward-1
       ip: 0.0.0.0
-      port: 15711
+      port: 30711
     client:
       ip: 0.0.0.0
-      port: 15712
+      port: 30712
     service:
       type: NodePort
       ports:
-        nodePort: 15711
-        nodeTargetPort: 15711
-        clientPort: 15712
-        clientTargetPort: 15712
+        nodePort: 30711
+        nodeTargetPort: 30711
+        clientPort: 30712
+        clientTargetPort: 30712
     configmap:
       indyConfig: |-
         NETWORK_NAME = 'baf'
