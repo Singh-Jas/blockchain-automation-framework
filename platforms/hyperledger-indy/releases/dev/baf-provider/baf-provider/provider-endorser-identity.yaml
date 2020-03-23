@@ -1,0 +1,43 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-provider-provider-endorser-transaction
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-provider-ns
+spec:
+  releaseName: baf-provider-provider-endorser-transaction
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-ledger-txn
+    git: ssh://git@github.com/Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-provider-provider-endorser-transaction
+      namespace: baf-provider-ns
+    network:
+      name: baf
+    image:
+      cli:
+        name: baf-provider
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred
+    vault:
+      address: http://192.168.1.155:8200
+      role: rw
+      serviceAccountName: baf-provider-admin-vault-auth
+      auth_path: kubernetes-baf-provider-admin-auth
+    organization:
+      name: baf-provider
+      adminIdentity:
+        name: authority-trustee
+        did: FKCQJg2EMprKRvXx7dxGPn
+        path: baf-authority/trustees
+      newIdentity:
+        name: provider-endorser
+        role: ENDORSER
+        did: AkARGYbCo8eKx88NrDf66a
+        verkey: 6K2u39NeDeJUBTPd6pbtr71RPUhAUrewovD8x9zipvN9
+        path: baf-provider/endorsers
+    node:
+      name: baf-provider
