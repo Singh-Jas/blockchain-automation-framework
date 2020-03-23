@@ -1,0 +1,43 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: baf-dzamba-partner-partner-endorser-transaction
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: baf-dzamba-partner-ns
+spec:
+  releaseName: baf-dzamba-partner-partner-endorser-transaction
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-ledger-txn
+    git: ssh://git@github.com/Singh-Jas/blockchain-automation-framework.git
+    ref: test-indy-release
+  values:
+    metadata:
+      name: baf-dzamba-partner-partner-endorser-transaction
+      namespace: baf-dzamba-partner-ns
+    network:
+      name: baf
+    image:
+      cli:
+        name: baf-dzamba-partner
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred
+    vault:
+      address: http://192.168.1.155:8200
+      role: rw
+      serviceAccountName: baf-dzamba-partner-admin-vault-auth
+      auth_path: kubernetes-baf-dzamba-partner-admin-auth
+    organization:
+      name: baf-dzamba-partner
+      adminIdentity:
+        name: authority-trustee
+        did: FKCQJg2EMprKRvXx7dxGPn
+        path: baf-authority/trustees
+      newIdentity:
+        name: partner-endorser
+        role: ENDORSER
+        did: 8UssDv6duZtr3PhYMcNwoV
+        verkey: 55Ui2Dn91Z8Arb5opcuDEDhdsyMeRryES3o9BQnhJPWq
+        path: baf-dzamba-partner/endorsers
+    node:
+      name: baf-dzamba-partner
