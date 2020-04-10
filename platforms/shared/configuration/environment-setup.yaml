@@ -21,7 +21,7 @@
         name:  setup/helm
       vars:
         helm:
-          version: "v2.14.1"
+          version: "v2.16.5"
           os: "{{ install_os }}"
           arch: "{{ install_arch }}"
           bin_directory: "{{ bin_install_dir }}"
