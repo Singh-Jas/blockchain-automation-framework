@@ -1,0 +1,26 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-dtg
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-dtg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-domain-genesis
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: dev-indy-release
+  values:
+    metadata:
+      name: dla-lm-dtg
+      namespace: dla-lm-ns
+    organization:
+      name: dla-lm
+    configmap:
+      domainGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"alias":"tq-trustee","dest":"X6RUDXSa9WVQG5FgKsJk8o","role":"0","verkey":"HQKE9QfNqXTCxZ4KLFd1cCb4L4eYSJ5v96vuY2f6SZ2n"},"metadata":{},"type":"1"},"txnMetadata":{"seqNo":1},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"steward-1","dest":"8tZkSrdNiykVEiELukJZxJ","role":"2","verkey":"5JPXBDMq2HTLBnrsrvS1b5TgWrCZyABm4AhFhfFzjfWe"},"metadata":{"from":"X6RUDXSa9WVQG5FgKsJk8o"},"type":"1"},"txnMetadata":{"seqNo":2},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"steward-2","dest":"DGDCjPZGWABfRJeZZG2B8j","role":"2","verkey":"7gdmDNtqq4kH2tw3KAYV2sV3xrwzEY1pYyKRzP9wSvpb"},"metadata":{"from":"X6RUDXSa9WVQG5FgKsJk8o"},"type":"1"},"txnMetadata":{"seqNo":3},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"steward-3","dest":"MgyjdbocSLXwekgDWJG78Y","role":"2","verkey":"CH2gDkqNMNLoot3Y9JhKX7Jhpt2dc14qhhLuq876xPvQ"},"metadata":{"from":"X6RUDXSa9WVQG5FgKsJk8o"},"type":"1"},"txnMetadata":{"seqNo":4},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"steward-4","dest":"JywxB1BABocGXqVDepPigV","role":"2","verkey":"AoSdDmE9tYWThTCXVqppxojpD19dECRVrCfJ6jZfw4ru"},"metadata":{"from":"X6RUDXSa9WVQG5FgKsJk8o"},"type":"1"},"txnMetadata":{"seqNo":5},"ver":"1"}
