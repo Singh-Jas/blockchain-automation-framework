@@ -1,0 +1,43 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-endorser-transaction
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-endorser-transaction
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-ledger-txn
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: dev-indy-release
+  values:
+    metadata:
+      name: dla-lm-endorser-transaction
+      namespace: dla-lm-ns
+    network:
+      name: dla-network
+    image:
+      cli:
+        name: dla-lm
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred
+    vault:
+      address: http://a4145f6cd63dd11ea823f12d30959269-1237088232.us-east-1.elb.amazonaws.com/vault
+      role: rw
+      serviceAccountName: dla-lm-admin-vault-auth
+      auth_path: kubernetes-dla-lm-admin-auth
+    organization:
+      name: dla-lm
+      adminIdentity:
+        name: tq-trustee
+        did: Vv3UcZ9mpTDbWFy2ihkW6K
+        path: dla-lm/trustees
+      newIdentity:
+        name: endorser
+        role: ENDORSER
+        did: HxSSHrBMsHQzB9U8yVGQyN
+        verkey: AF1S2Ab2yYvDEUGjMWobHUCVsi9JwQunNP448J9bEmTj
+        path: dla-lm/endorsers
+    node:
+      name: dla-lm
