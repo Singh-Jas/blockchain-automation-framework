@@ -25,6 +25,7 @@ spec:
     node:
       name: {{ peer.name }}
       consensus: {{ consensus }}
+      subject: {{ peer.subject }}
       mountPath: /etc/quorum/qdata
       imagePullSecret: regcred
       keystore: keystore_1
@@ -37,7 +38,6 @@ spec:
         db: {{ peer.db.port }}
       dbname: demodb
       mysqluser: demouser
-      mysqlpassword: password
     vault:
       address: {{ vault.url }}
       secretprefix: secret/{{ component_ns }}/crypto/{{ peer.name }}
@@ -47,13 +47,12 @@ spec:
       role: vault-role
       authpath: quorum{{ name }}
     tessera:
-      dburl: "jdbc:mysql://localhost:3306/demodb"
-      dbusername: $username
-      dbpassword: $password
+      dburl: "jdbc:mysql://{{ peer.name }}:3306/demodb"
+      dbusername: demouser
 {% if network.config.tm_tls == 'strict' %}
-      url: "https://localhost:9001"
+      url: "https://{{ peer.name }}.{{ external_url }}:{{ peer.transaction_manager.ambassador }}"
 {% else %}
-      url: "http://localhost:9001"
+      url: "http://{{ peer.name }}.{{ external_url }}:{{ peer.transaction_manager.ambassador }}"
 {% endif %}
       othernodes:
 {% for tm_node in network.config.tm_nodes %}

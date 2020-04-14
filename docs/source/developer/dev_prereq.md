@@ -1,16 +1,28 @@
 # Developer Prerequisites
 
-The following mandatory pre-requisites must be completed to set up a development environment for BAF.
+The following mandatory pre-requisites must be completed to set up a development environment for BAF.   
+The process of setting up developer pre-requisites can be done manually or via an automation script(currently script is for windows OS only)
+
+## Script Based Setup
+You can use the [script](https://github.com/hyperledger-labs/blockchain-automation-framework/platforms/shared/scripts/pre_setup_win.bat) to setup developer prerequisites (currently for Windows OS only).   
+
+---
+
+**NOTE:** You need to run the script with admin rights. This can be done by right clicking the script and selecting 'Run as admininstrator'. 
+
+---
+
+## Manual Setup
 
 **The estimated total effort is 55 mins.**
 
 ---
 
-**NOTE:** You will need at least 8GB RAM to run BAF on local machine.
+**NOTE:** You will need at least 8GB RAM to run BAF on local machine. 
 
 ---
 
-## Setting up Git on your machine
+### Setting up Git on your machine
 
 _Estimated Time: 10 minutes_
 
@@ -37,7 +49,7 @@ To use Git, you need to install the software on your local machine.
    git config --global core.autocrlf false
    ```
 
-## Setting up Github
+### Setting up Github
 
 _Estimated Time: 5 minutes_
 
@@ -73,11 +85,11 @@ Complete the following steps to download and configure BAF repository on your lo
    git checkout develop
    ```
 
-## Setting up Docker
+### Setting up Docker
 
 _Estimated Time: 10 minutes_
 
-Install [Docker Engine](https://docs.docker.com/install/) to make sure your local environment has the capbility to execute `docker` commands.
+Install [Docker Toolbox](https://docs.docker.com/toolbox/overview/) to make sure your local environment has the capbility to execute `docker` commands.
 You can check the version of Docker you have installed with the following
 command from a terminal prompt:
 
@@ -87,11 +99,11 @@ docker --version
 
 ---
 
-**NOTE:** For Windows, it is recommended to use Docker Toolbox with VirtualBox. Do not use Docker for Windows wih HyperV.
+**NOTE:** For Windows, you MUST use Docker Toolbox with VirtualBox. Do not use Docker Desktop for Windows. Also HyperV should be DISABLED for Mac and Windows.
 
 ---
 
-## Setting up HashiCorp Vault
+### Setting up HashiCorp Vault
 
 _Estimated Time: 15 minutes_
 
@@ -124,14 +136,14 @@ We need [Hashicorp Vault](https://www.vaultproject.io/) for the certificate and 
 1. Open browser at [http://localhost:8200/](http://localhost:8200/). And initialize the Vault by providing your choice of key shares and threshold. (below example uses 1)
    ![](./../_static/vault-init.png)
 1. Click **Download Keys** or copy the keys, you will need them. Then click **Continue to Unseal**. Provide the unseal key first and then the root token to login.
-1. In a new terminal, execute the following (assuming `vault` is in your `PATH`, replace `VAULT_TOKEN` with your token)
+1. In a new terminal, execute the following (assuming `vault` is in your `PATH`):
    ```bash
-   export VAULT_ADDR='http://127.0.0.1:8200'
-   export VAULT_TOKEN="<YOUR-VAULT-ROOT-TOKEN>"
+   export VAULT_ADDR='http://<Your Vault local IP address>:8200' #e.g. http://192.168.0.1:8200
+   export VAULT_TOKEN="<Your Vault root token>"
    vault secrets enable -version=1 -path=secret kv
    ```
 
-## Setting up Minikube
+### Setting up Minikube
 
 _Estimated Time: 15 minutes_
 
@@ -165,7 +177,7 @@ For development environment, minikube can be used as the Kubernetes cluster on w
 minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=15000-20000
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 At Step 5, if you get the following error:
 

@@ -1,7 +1,7 @@
 var express = require('express')
   , router = express.Router();
 
-const {productContract, fromAddress} = require('../web3services');
+const {productContract, fromAddress, fromNodeSubject} = require('../web3services');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 var bodyParser = require('body-parser');
@@ -17,10 +17,9 @@ router.get("/:trackingID?", function(req, res) {
     console.log(trackingID, "***");
     productContract.methods
       .getSingleContainer(req.params.trackingID)
-      .call({ from: fromAddress, gas: 6721975, gasPrice: "30000000" })
+      .call({ from: fromAddress, gas: 6721975, gasPrice: "0" })
       .then(response => {
           var newContainer = response;
-          //response.events.sendObject.returnValues[0]
           var container = {};
           container.health = newContainer.health;
           container.sold = newContainer.sold;
@@ -34,13 +33,16 @@ router.get("/:trackingID?", function(req, res) {
             container.misc[key] = json[key];
           }
           container.custodian = newContainer.custodian;
+          container.custodian = container.custodian + "," + newContainer.lastScannedAt;
           container.trackingID = newContainer.trackingID;
-          container.timestamp = newContainer.timestamp;
+          container.timestamp  = (new Date(newContainer.timestamp * 1000)).getTime();
           container.containerID = newContainer.containerID;
           container.linearId = {};
           container.linearId.externalId = null;
           container.linearId.id = container.trackingID;
           container.participants = newContainer.participants;
+          container.contents = newContainer.containerContents;
+
         res.send(container
           ); 
         
@@ -55,13 +57,13 @@ router.get("/:trackingID?", function(req, res) {
     // GET for get all containers
     productContract.methods
     .getContainersLength()
-    .call({ from: fromAddress, gas: 6721975, gasPrice: "30000000"})
+    .call({ from: fromAddress, gas: 6721975, gasPrice: "0"})
     .then(async response => {
       arrayLength = response;
       for(var i = 1; i <= arrayLength; i++){
         var toPush = await productContract.methods
         .getContainerAt(i)
-        .call({ from: fromAddress, gas: 6721975, gasPrice: "30000000"})
+        .call({ from: fromAddress, gas: 6721975, gasPrice: "0"})
         console.log(toPush);
           var container = {};
           container.health = toPush.health;
@@ -74,15 +76,18 @@ router.get("/:trackingID?", function(req, res) {
             container.misc[key] = json[key];
           }
 
-
           container.custodian = toPush.custodian;
+          container.custodian = container.custodian + "," + toPush.lastScannedAt;
+          container.lastScannedAt = toPush.lastScannedAt;
           container.trackingID = toPush.trackingID;
-          container.timestamp = toPush.timestamp;
+          container.timestamp  = (new Date(toPush.timestamp * 1000)).getTime();
           container.containerID = toPush.containerID;
           container.linearId = {};
           container.linearId.externalId = null;
           container.linearId.id = container.trackingID;
           container.participants = toPush.participants;
+          container.contents = toPush.containerContents;
+
 
           displayArray.push(container);
       }
@@ -102,12 +107,11 @@ router.post("/", upload.array(), function(req, res) {
   let newContainer = {
     misc: req.body.misc,
     trackingID: req.body.trackingID,
-    counterparties: req.body.counterparties.map(it =>
-      it.indexOf("O=") != -1 ? it.split("O=")[1].split(",")[0] : it
-    ) //filter out to only send org name
-  }; //filter out to only send org
+    lastScannedAt: fromNodeSubject,
+    counterparties: req.body.counterparties
+  };
   var isInArray = false;
-  if (newContainer.counterparties.includes(fromAddress)) {
+  if (newContainer.counterparties.includes(fromAddress+","+fromNodeSubject)) {
     isInArray = true;
   }
   
@@ -126,10 +130,10 @@ router.post("/", upload.array(), function(req, res) {
         "health",
         misc,
         newContainer.trackingID,
-        "",
-        newContainer.counterparties
+        newContainer.lastScannedAt,
+        newContainer.counterparties,
       )
-      .send({ from: fromAddress, gas: 6721900, gasPrice: "30000000" })
+      .send({ from: fromAddress, gas: 6721900, gasPrice: "0" })
       .on("receipt", function(receipt) {
 
         if (receipt.status === true) {
@@ -140,22 +144,19 @@ router.post("/", upload.array(), function(req, res) {
         res.send(error.message);
         console.log(error);
       });
-  } else {
-    res.send(
-      "Transaction not sent. Your address is not in counterparties list"
-    );
   }
 });
 
-//PUT for changing custodian
+//PUT for updating custodian
 router.put("/:trackingID/custodian", function(req, res) {
   res.setTimeout(15000);
   // TODO: Implement change custodian functionality
   var trackingID = req.params.trackingID;
+  var lastScannedAt = fromNodeSubject;
   console.log(trackingID);
     productContract.methods
-      .updateContainerCustodian(trackingID)
-      .send({ from: fromAddress, gas: 6721975, gasPrice: "30000000" })
+      .updateContainerCustodian(trackingID, lastScannedAt)
+      .send({ from: fromAddress, gas: 6721975, gasPrice: "0" })
       .then( response => {
         res.send(trackingID)
       })
@@ -173,7 +174,7 @@ router.put("/:containerTrackingID/unpackage", upload.array(), function(req, res)
   var trackableID = req.body.contents;
   productContract.methods
     .unpackageTrackable(containerTrackingID, trackableID)
-    .send({ from: fromAddress, gas: 6721975, gasPrice: "30000000" })
+    .send({ from: fromAddress, gas: 6721975, gasPrice: "0" })
       .then( response => {
         res.send(containerTrackingID)
       })
@@ -183,20 +184,23 @@ router.put("/:containerTrackingID/unpackage", upload.array(), function(req, res)
 });
 
 // PUT for package trackable
-router.put("/:trackingID/package", function(req, res){
+router.put("/:containerID/package", function(req, res){
 	let trackable = {
 		containerID: req.params.containerID,
-		trackingID: req.body.trackingID
-	};
+    trackingID: req.body.contents
+  };    console.log(trackable.containerID);
+  console.log(trackable.trackingID);
+
 	productContract.methods
 	.packageTrackable(
 		trackable.trackingID,
-		trackable.containerID
+    trackable.containerID,
 	)
-  .send({ from: fromAddress, gas: 6721975, gasPrice: "30000000" })
+  .send({ from: fromAddress, gas: 6721975, gasPrice: "0" })
     .on("receipt", function(receipt) {
       if (receipt.status === true) {
         res.send(trackable.containerID);
+        console.log(res.send(trackable.containerID));
       }
     })
     .on("error", function(error, receipt) {

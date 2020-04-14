@@ -21,9 +21,13 @@ Once all the prerequisites have been configured, it is time to update the Blockc
 
 ## Deploy the Network
 
-After the configuration file is updated and saved, now run the following command from the **blockchain-automation-framework** folder to deploy your network.
+After the configuration file is updated and saved on the **Ansible Controller**, run the provisioning script to deploy the network using the following command.
 
+```bash
+# go to blockchain-automation-framework
+cd blockchain-automation-framework
+# Run the provisioning scripts
+ansible-playbook  platforms/shared/configuration/site.yaml -e "@/path/to/network.yaml" 
 ```
-ansible-playbook platforms/shared/configuration/site.yaml --extra-vars "@path-to-network.yaml"
-```
-For detailed instructions, read [Setting up a DLT network](./operations/setting_dlt.md).
+
+For more detailed instructions to set up a network, read [Setting up a DLT network](./operations/setting_dlt.md).

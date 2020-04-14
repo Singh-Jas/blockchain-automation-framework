@@ -140,50 +140,6 @@ let productABI = [
         "type": "uint256"
       }
     ],
-    "name": "allContainers",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "health",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "custodian",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "lastScannedAt",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "trackingID",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "containerID",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "name": "allProducts",
     "outputs": [
       {
@@ -524,40 +480,6 @@ let productABI = [
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "history",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "custodian",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "lastScannedAt",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -840,6 +762,11 @@ let productABI = [
         "internalType": "string",
         "name": "_containerID",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_lastScannedAt",
+        "type": "string"
       }
     ],
     "name": "updateContainerCustodian",
@@ -912,19 +839,6 @@ let productABI = [
       }
     ],
     "name": "locationEvent",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "name": "sendString",
     "type": "event"
   },
   {
@@ -1135,51 +1049,6 @@ let productABI = [
         "type": "uint256"
       }
     ],
-    "name": "allContainers",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "health",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "custodian",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "lastScannedAt",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "trackingID",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "containerID",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "name": "allProducts",
     "outputs": [
       {
@@ -1677,41 +1546,6 @@ let productABI = [
     "inputs": [
       {
         "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "history",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "custodian",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "lastScannedAt",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
         "name": "_trackableTrackingID",
         "type": "string"
       },
@@ -1776,6 +1610,11 @@ let productABI = [
         "internalType": "string",
         "name": "_containerID",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_lastScannedAt",
+        "type": "string"
       }
     ],
     "name": "updateContainerCustodian",
@@ -1834,8 +1673,9 @@ let productABI = [
         "type": "string"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -1880,14 +1720,14 @@ let productABI = [
             "type": "address"
           },
           {
-            "internalType": "string",
-            "name": "lastScannedAt",
-            "type": "string"
-          },
-          {
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "lastScannedAt",
+            "type": "string"
           }
         ],
         "internalType": "struct ProductContract.Transaction",
@@ -2048,40 +1888,6 @@ let productABI = [
       {
         "internalType": "uint256",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "history",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "custodian",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "lastScannedAt",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
         "type": "uint256"
       }
     ],
@@ -2479,7 +2285,7 @@ let productABI = [
     "type": "function"
   }
 ];
-          
+
 module.exports = {
   productABI
 }
