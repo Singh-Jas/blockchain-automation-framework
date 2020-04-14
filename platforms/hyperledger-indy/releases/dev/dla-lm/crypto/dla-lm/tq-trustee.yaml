@@ -1,0 +1,31 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-tq-trustee
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-tq-trustee
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: dev-indy-release
+  values:
+    metadata:
+      name: dla-lm-tq-trustee
+      namespace: dla-lm-ns
+    network:
+      name: dla-network
+    image:
+      name: dla-lm
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:1.9.2
+      pullSecret: regcred
+    vault:
+      address: http://a4145f6cd63dd11ea823f12d30959269-1237088232.us-east-1.elb.amazonaws.com/vault/
+      keyPath: dla-lm.trustees
+      identity: tq-trustee
+      auth_path: kubernetes-dla-lm-admin-auth
+    account:
+      service: dla-lm-admin-vault-auth
+      role: rw
