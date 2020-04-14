@@ -1,0 +1,91 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: dla-lm-steward-4-node
+  annotations:
+    flux.weave.works/automated: "false"
+  namespace: dla-lm-ns
+spec:
+  releaseName: dla-lm-steward-4-node
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-node
+    git: git@github.com:Singh-Jas/blockchain-automation-framework.git
+    ref: dev-indy-release
+  values:
+    metadata:
+      name: dla-lm-steward-4-node
+      namespace: dla-lm-ns
+    network:
+      name: dla-network
+    organization:
+      name: dla-lm
+    image:
+      pullSecret: regcred
+      initContainer:
+        name: dla-lm-steward-4-node-init
+        repository: alpine:3.9.4
+      indyNode:
+        name: dla-lm-steward-4-node
+        repository: index.docker.io/hyperledgerlabs/indy-node:1.9.2
+    node:
+      name: steward-4
+      ip: 0.0.0.0
+      port: 30741
+    client:
+      ip: 0.0.0.0
+      port: 30742
+    service:
+      type: ClusterIP
+      ports:
+        nodePort: 30741
+        nodeTargetPort: 30741
+        clientPort: 30742
+        clientTargetPort: 30742
+    configmap:
+      indyConfig: |-
+        NETWORK_NAME = 'dla-network'
+        # Enable stdout logging
+        enableStdOutLogging = True
+        logRotationBackupCount = 10
+        # Directory to store ledger.
+        LEDGER_DIR = '/var/lib/indy/data'
+        # Directory to store logs.
+        LOG_DIR = '/var/log/indy'
+        # Directory to store keys.
+        KEYS_DIR = '/var/lib/indy/keys'
+        # Directory to store genesis transactions files.
+        GENESIS_DIR = '/var/lib/indy/genesis'
+        # Directory to store backups.
+        BACKUP_DIR = '/var/lib/indy/backup'
+        # Directory to store plugins.
+        PLUGINS_DIR = '/var/lib/indy/plugins'
+        # Directory to store node info.
+        NODE_INFO_DIR = '/var/lib/indy/data'
+    ambassador:
+      annotations: |-
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: dla-lm-steward-4-node-node-mapping
+        port: 30741
+        service: dla-lm-steward-4-node.dla-lm-ns:30741
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: dla-lm-steward-4-node-client-mapping
+        port: 30742
+        service: dla-lm-steward-4-node.dla-lm-ns:30742
+    vault:
+      address: http://a4145f6cd63dd11ea823f12d30959269-1237088232.us-east-1.elb.amazonaws.com/vault
+      serviceAccountName: dla-lm-steward-4-vault-auth
+      keyPath: /keys/dla-network/keys/steward-4
+      authPath: kubernetes-dla-lm-steward-4-auth
+      nodeId: steward-4
+      role: ro
+    storage:
+      data:
+        storagesize: 2Gi
+        storageClassName: dla-lm-aws-baremetal-storageclass
+      keys:
+        storagesize: 1Gi
+        storageClassName: dla-lm-aws-baremetal-storageclass
